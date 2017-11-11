@@ -5,26 +5,16 @@
 # TODO   Crossover elite individuals and generate next population
 # TODO   Mutate (if needed)
 
-from midiutil.MidiFile import MIDIFile #  creating midi files
-import mido     #  reading in midi files
-import pygame   #  playing midi files
+# Creating midi files
+from midiutil.MidiFile import MIDIFile
+# Reading midi files
+import mido
+# Playing midi files
+import pygame
 from random import randint
 from random import uniform
 
-'''
-The game plan:
-  Jeremy will be in charge of finding out how to do evaluation
-  Alex will work on midi util and all that
-  Dustin will decide on note representation and individuals representation, and crossover, etc. reproduction
-
-  We will meet in 2 days to confirm
-'''
-
-
-# note = [pitch (48-84), time(0-16), duration]
-# individual = [16 notes]
-# an individual is 16 beats, each beat can contain zero or more notes
-# a note consists of a pitch and a duration
+INDIVIDUAL_SIZE = 32
 
 
 #_____________________REPRODUCTION AND MUTATION INFO_________________________#
@@ -111,9 +101,9 @@ while pygame.mixer.music.get_busy():
 '''
 
 
-def play_midi_file(filename):
+def play_midi_file(songfile):
     pygame.init()
-    pygame.mixer.music.load(filename)
+    pygame.mixer.music.load(songfile)
     pygame.mixer.music.play(0)
 
     while pygame.mixer.music.get_busy():
@@ -123,12 +113,12 @@ def play_midi_file(filename):
 def generate_random_individual():
     new_individual = []
 
-    for beat in range(16):
+    for beat in range(INDIVIDUAL_SIZE):
         new_individual.append([randint(48, 84), beat, uniform(.5, 4)])
     return new_individual
 
 
-def write_midi_file(individual, file_name):
+def write_midi_file(song, file_name):
     # Create the MIDIFile Object with 1 track
     my_midi = MIDIFile(1)
 
@@ -146,7 +136,7 @@ def write_midi_file(individual, file_name):
     volume = 100 # (constant)
 
     # Now add the notes
-    for beat in individual:
+    for beat in song:
         pitch, time, duration = beat
         my_midi.addNote(track, channel, pitch, time, duration, volume)
 
