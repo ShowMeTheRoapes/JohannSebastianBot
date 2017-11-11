@@ -14,7 +14,7 @@ import pygame
 from random import randint
 from random import uniform
 
-INDIVIDUAL_SIZE = 32
+INDIVIDUAL_SIZE = 16
 
 
 #_____________________REPRODUCTION AND MUTATION INFO_________________________#
@@ -146,11 +146,51 @@ def write_midi_file(song, file_name):
     bin_file.close()
 
 
+def generate_initial_population(size):
+    population = []
+    for i in range(size):
+        population.append(generate_random_individual())
+
+    return population
+
+
+def create_next_generation():
+    return 0
+
+
+def mutate_individual(mutant, num_mutations):
+    for i in range(num_mutations):
+        index = randint(0, len(mutant)-1)
+        if i % 2 == 0:
+            mutant[index] = [randint(48, 84), mutant[index][1], uniform(.5, 4)]
+            print(str(index) + " is now randomized to " + str(mutant[index]))
+        else:
+            swapper_index = randint(0, len(mutant)-1)
+            temp = mutant[swapper_index]
+            mutant[swapper_index] = mutant[index]
+            mutant[index] = temp
+
+            print(str(index) + " is swapped with " + str(swapper_index))
+
+    return mutant
+
+
+def main(size):
+    # population = generate_initial_population(size)
+    # filename = "new.mid"
+    # write_midi_file(population[0], filename)
+    # play_midi_file(filename)
+
+    filename = "mutated.mid"
+    # mutated = mutate_individual(population[0], 4)
+    # write_midi_file(mutated, filename)
+    play_midi_file(filename)
+
+
+
 # filename = "new_test.mid"
 # individual = generate_random_individual()
 # write_midi_file(individual, filename)
 # play_midi_file(filename)
 
-# file = mido.MidiFile("test.mid")
-# for msg in file.play():
-#     print(msg)
+main(1)
