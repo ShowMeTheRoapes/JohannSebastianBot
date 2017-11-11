@@ -5,7 +5,7 @@
 # TODO   Crossover elite individuals and generate next population
 # TODO   Mutate (if needed)
 
-import midiutil #  creating midi files
+from midiutil.MidiFile import MIDIFile #  creating midi files
 import mido     #  reading in midi files
 import pygame   #  playing midi files
 from random import randint
@@ -108,3 +108,55 @@ pygame.mixer.music.play(0)
 while pygame.mixer.music.get_busy():
     pygame.event.poll()
 '''
+
+
+def play_midi_file(filename):
+    pygame.init()
+    pygame.mixer.music.load(filename)
+    pygame.mixer.music.play(0)
+
+    while pygame.mixer.music.get_busy():
+        pygame.event.poll()
+
+
+def generate_random_individual():
+    new_individual = []
+
+    for beat in range(16):
+        new_individual.append([randint(48, 84), beat, randint(0, 4)])
+
+    return new_individual
+
+
+def write_midi_file(individual, filename):
+    # Create the MIDIFile Object with 1 track
+    my_midi = MIDIFile(1)
+
+    # Tracks are numbered from zero. Times are measured in beats.
+    track = 0
+    time = 0
+
+    # Add track name and tempo.
+    my_midi.addTrackName(track, time, "Main")
+    my_midi.addTempo(track, time, 120)
+
+    # Add a note. addNote expects the following information:
+    track = 0 # (constant)
+    channel = 0 # (constant)
+    volume = 100 # (constant)
+
+    # Now add the notes
+    for beat in individual:
+        pitch, time, duration = beat
+        my_midi.addNote(track, channel, pitch, time, duration, volume)
+
+    # And write it to disk.
+    bin_file = open(filename, 'wb')
+    my_midi.writeFile(bin_file)
+    bin_file.close()
+
+
+filename = "test.mid"
+# individual = generate_random_individual()
+# write_midi_file(individual, filename)
+play_midi_file(filename)
