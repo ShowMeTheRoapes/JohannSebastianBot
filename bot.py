@@ -9,6 +9,7 @@ from midiutil.MidiFile import MIDIFile #  creating midi files
 import mido     #  reading in midi files
 import pygame   #  playing midi files
 from random import randint
+from random import uniform
 
 '''
 The game plan:
@@ -123,8 +124,7 @@ def generate_random_individual():
     new_individual = []
 
     for beat in range(16):
-        # new_individual.append([randint(48, 84), beat, randint(0, 4)])
-        new_individual.append([randint(48, 84), beat, 1])
+        new_individual.append([randint(48, 84), beat, uniform(.5, 4)])
     return new_individual
 
 
