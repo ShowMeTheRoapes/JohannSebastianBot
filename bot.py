@@ -5,9 +5,10 @@
 # TODO   Crossover elite individuals and generate next population
 # TODO   Mutate (if needed)
 
-import midiutil
-import mido
-import pygame
+import midiutil #  creating midi files
+import mido     #  reading in midi files
+import pygame   #  playing midi files
+from random import randint
 
 '''
 The game plan:
@@ -25,6 +26,31 @@ The game plan:
 # a note consists of a pitch and a duration
 
 
+#_____________________REPRODUCTION AND MUTATION INFO_________________________#
+"""
+Reproduction/Next Gen:
+  Top scoring individuals will reproduce for next round.
+  Bottom individuals will be replaced with a new randomized individual
+  A few of the other tops will stay with a few mutations
+  Proportions of new gen assuming 10 per gen: 2/10 top reproducers, 1/10 bottom one re-randomized, 2/10 lesser tops with definite mutations, 5/10 new children with possible mutations
+  1
+Crossover:
+  Cross over will be a random assignment that should be about 50%
+    INDIVIDUAL_SIZE = ???
+    ...
+    parent0 = [...]
+    parent1 = [...]
+    child = []
+    for i in range(INDIVIDUAL_SIZE):
+        if randint(0,1) == 0:
+            child.append(parent0[i])
+        else:
+            child.append(parent1[i])
+
+Mutation:
+  Mutation will be a lowish percentage that just completely randomizes the note that is being mutated...maybe like 5-10% chance for new children
+  
+"""
 
 
 #_____________BASE FOR HOW TO ADD NOTES AND CREATE A MIDIFILE_________________#
@@ -48,12 +74,12 @@ MyMIDI.addTempo(track,time,120)
  
 
 # Add a note. addNote expects the following information:
-track = 0
-channel = 0
+track = 0    (constant)
+channel = 0  (constant)
 pitch = 60
 time = 0
 duration = 1
-volume = 100
+volume = 100 (constant)
  
 
 # Now add the note.
