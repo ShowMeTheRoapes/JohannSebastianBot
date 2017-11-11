@@ -157,6 +157,9 @@ def generate_initial_population(size):
 
 def create_next_generation(pop, ratings):
     next_generation = []
+
+
+
     return next_generation
 
 
@@ -184,7 +187,7 @@ def evaluate_individual(generation, child_num):
     while repeat:
         print("Now playing: " + filename)
         play_midi_file(filename)
-        action = input("Would you like to listen to this one again?")
+        action = input("Would you like to (r)eplay " + filename + " again? ")
         if action != "r":
             repeat = False
 
@@ -206,9 +209,9 @@ def main(size=10):
         population = create_next_generation(population, ratings)
         generation += 1
 
-        action = input("Are you done generating new songs? ")
+        action = input("Are you (d)one generating new songs? ")
         if action == "d":
             done = True
 
 
-main(1)
+main(2)
