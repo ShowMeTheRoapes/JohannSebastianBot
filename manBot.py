@@ -1,4 +1,3 @@
-# TODO Take Bach MIDI files and get them in a usable format
 # TODO Create initial random population
 # TODO while (not done)
 # TODO   Evaluate individuals
@@ -150,12 +149,15 @@ def generate_initial_population(size):
     population = []
     for i in range(size):
         population.append(generate_random_individual())
+        filename = "generation0individual" + str(i) + ".mid"
+        write_midi_file(population[i], filename)
 
     return population
 
 
-def create_next_generation():
-    return 0
+def create_next_generation(pop, ratings):
+    next_generation = []
+    return next_generation
 
 
 def mutate_individual(mutant, num_mutations):
@@ -175,22 +177,38 @@ def mutate_individual(mutant, num_mutations):
     return mutant
 
 
-def main(size):
-    # population = generate_initial_population(size)
-    # filename = "new.mid"
-    # write_midi_file(population[0], filename)
-    # play_midi_file(filename)
+def evaluate_individual(generation, child_num):
+    filename = "generation" + str(generation) + "individual" + str(child_num) + ".mid"
+    repeat = True
 
-    filename = "mutated.mid"
-    # mutated = mutate_individual(population[0], 4)
-    # write_midi_file(mutated, filename)
-    play_midi_file(filename)
+    while repeat:
+        print("Now playing: " + filename)
+        play_midi_file(filename)
+        action = input("Would you like to listen to this one again?")
+        if action != "r":
+            repeat = False
+
+    rating = input("What do you rate this song on a scale of 0.0 to 9.0? ")
+
+    return rating
 
 
+def main(size=10):
+    done = False
+    generation = 0
+    population = generate_initial_population(size)
 
-# filename = "new_test.mid"
-# individual = generate_random_individual()
-# write_midi_file(individual, filename)
-# play_midi_file(filename)
+    while not done:
+        ratings = []
+        for individual in range(len(population)):
+            ratings.append(evaluate_individual(generation, individual))
+
+        population = create_next_generation(population, ratings)
+        generation += 1
+
+        action = input("Are you done generating new songs? ")
+        if action == "d":
+            done = True
+
 
 main(1)
