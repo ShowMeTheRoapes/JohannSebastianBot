@@ -123,12 +123,12 @@ def generate_random_individual():
     new_individual = []
 
     for beat in range(16):
-        new_individual.append([randint(48, 84), beat, randint(0, 4)])
-
+        # new_individual.append([randint(48, 84), beat, randint(0, 4)])
+        new_individual.append([randint(48, 84), beat, 1])
     return new_individual
 
 
-def write_midi_file(individual, filename):
+def write_midi_file(individual, file_name):
     # Create the MIDIFile Object with 1 track
     my_midi = MIDIFile(1)
 
@@ -151,12 +151,12 @@ def write_midi_file(individual, filename):
         my_midi.addNote(track, channel, pitch, time, duration, volume)
 
     # And write it to disk.
-    bin_file = open(filename, 'wb')
+    bin_file = open(file_name, 'wb')
     my_midi.writeFile(bin_file)
     bin_file.close()
 
 
-filename = "test.mid"
-# individual = generate_random_individual()
-# write_midi_file(individual, filename)
+filename = "new_test.mid"
+individual = generate_random_individual()
+write_midi_file(individual, filename)
 play_midi_file(filename)
