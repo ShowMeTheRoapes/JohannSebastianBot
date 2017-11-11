@@ -19,9 +19,6 @@ The game plan:
 '''
 
 
-def initialize_population(size):
-  pass
-
 # note = [pitch (48-84), time(0-16), duration]
 # individual = [16 notes]
 # an individual is 16 beats, each beat can contain zero or more notes
