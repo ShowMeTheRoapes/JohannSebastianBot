@@ -127,7 +127,7 @@ def write_midi_file(song, file_name):
 
     # Add track name and tempo.
     my_midi.addTrackName(track, time, "Main")
-    my_midi.addTempo(track, time, 120)
+    my_midi.addTempo(track, time, 160)
 
     # Add a note. addNote expects the following information:
     track = 0 # (constant)
