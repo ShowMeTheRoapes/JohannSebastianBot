@@ -8,8 +8,8 @@ from random import uniform
 
 INDIVIDUAL_SIZE = 16
 PARENT_PERCENT = 0.25
-RANDOM_PERCENT = 0.10
-MUTANT_PERCENT = 0.40
+RANDOM_PERCENT = 0.25
+MUTANT_PERCENT = 0.25
 MUTATE_NUM = 8
 
 
@@ -78,23 +78,29 @@ def create_next_generation(population, ratings):
 
     # Get the parents
     for i in range(parent_num):
-        max_index = ratings.index(max(ratings))
-        parents.append(population[max_index])
-        ratings.pop(max_index)
-        population.pop(max_index)
+        index_of_max = ratings.index(max(ratings))
+        parents.append(population[index_of_max])
+        # print("Rating: " + str(ratings[index_of_max]) + " Parent: " + str(population[index_of_max]))
+        ratings.pop(index_of_max)
+        population.pop(index_of_max)
 
     # Create the children
-    children += crossover_parents(parents, parent_num)
+    children.extend(crossover_parents(parents, parent_num))
 
-    # Mutate some of the previous population
+    # Mutate the next best of the previous population
     for i in range(mutant_num):
-        mutated.append(mutate_individual(population[randint(0, len(population)-1)], MUTATE_NUM))
-
+        index_of_max = ratings.index(max(ratings))
+        mutated.append(mutate_individual(population[index_of_max], MUTATE_NUM))
+        ratings.pop(index_of_max)
+        population.pop(index_of_max)
     # Generate the randoms
     for i in range(random_num):
         randoms.append(generate_random_individual())
 
-    next_generation += parents + children + mutated + randoms
+    next_generation.extend(parents)
+    next_generation.extend(children)
+    next_generation.extend(mutated)
+    next_generation.extend(randoms)
 
     return next_generation
 
@@ -125,21 +131,15 @@ def crossover_parents(parents, child_num):
 
 def mutate_individual(mutant, num_mutations):
     for i in range(num_mutations):
-        index = randint(0, len(mutant) - 1)
-        if i % 2 == 0:
-            mutant[index] = [randint(48, 84), mutant[index][1], uniform(.5, 4)]
-        else:
-            swapper_index = randint(0, len(mutant) - 1)
-            temp = mutant[swapper_index]
-            mutant[swapper_index] = mutant[index]
-            mutant[index] = temp
+        note_index = randint(0, len(mutant) - 1)
+        mutant[note_index] = [randint(48, 84), mutant[note_index][1], uniform(.5, 4)]
 
     return mutant
 
 
 def evaluate_individual(individual):
-    good_diffs = [0, 3, 4, 5, 7, 9]
-    neutral_diffs = [2, 6, 8]
+    good_diffs = [3, 4, 5, 7, 9]
+    neutral_diffs = [0, 2, 6, 8]
     score = 0
 
     for i in range(len(individual)-1):
@@ -174,6 +174,9 @@ def evaluate_individual(individual):
     else:
         score -= 1
 
+    if individual[-1][2] < 1.5:
+        score -= 3
+
     return score
 
 
@@ -187,15 +190,22 @@ def main(size=10):
         for individual in population:
             ratings.append(evaluate_individual(individual))
 
-        if generation % 10000 == 0:
-            best_index = ratings.index(max(ratings))
-            best_individual = population[best_index]
-            filename = str(generation) + ".mid"
-            print("Writing " + filename + " with a score of: " + str(ratings[best_index]))
-            write_midi_file(best_individual, filename)
-            play_midi_file(filename)
+        if generation % 5000 == 0:
+            ratings_copy = ratings[:]
+            population_copy = population[:]
+            for i in range(3):
+                index_of_best = ratings_copy.index(max(ratings_copy))
+                best_song = population_copy[index_of_best]
+                print(ratings_copy)
+                filename = str(generation) + str(i+1) + ".mid"
+                write_midi_file(best_song, filename)
+                print("Playing " + filename + " with a score of: " + str(ratings_copy[index_of_best]))
+                play_midi_file(filename)
 
-        # print("Generation: " + str(generation) + " Population size: " + str(len(population)))
+                ratings_copy.pop(index_of_best)
+                population_copy.pop(index_of_best)
+
+        print("Generation: " + str(generation) + " Max rating: " + str(max(ratings)))
         population = create_next_generation(population, ratings)
         generation += 1
 
