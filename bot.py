@@ -262,23 +262,16 @@ def main(size=10):
         for individual in population:
             ratings.append(evaluate_individual(individual))
 
-        if generation % 5000 == 0:
-            ratings_copy = ratings[:]
-            population_copy = population[:]
-            for i in range(3):
-                index_of_best = ratings_copy.index(max(ratings_copy))
-                best_song = population_copy[index_of_best]
-                print(ratings_copy)
-                filename = str(generation) + str(i+1) + ".mid"
-                write_midi_file(best_song, filename)
-                print("Playing " + filename + " with a score of: " + str(ratings_copy[index_of_best]))
-                play_midi_file(filename)
+        if generation % 1000 == 0:
+            index_of_best = ratings.index(max(ratings))
+            best_song = population[index_of_best]
+            filename = str(generation) + ".mid"
+            write_midi_file(best_song, filename)
+            print("Playing " + filename + " with a score of: " + str(ratings[index_of_best]))
+            play_midi_file(filename)
 
-                ratings_copy.pop(index_of_best)
-                population_copy.pop(index_of_best)
-
-                if MUTATE_NUM > 1:
-                    MUTATE_NUM -= 1
+            if MUTATE_NUM > 1:
+                MUTATE_NUM -= 1
 
         print("Generation: " + str(generation) + " Max rating: " + str(max(ratings)))
         population = create_next_generation(population, ratings)
