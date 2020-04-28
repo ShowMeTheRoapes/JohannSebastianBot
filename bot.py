@@ -3,6 +3,8 @@ from midiutil.MidiFile import MIDIFile
 # Playing midi files
 import pygame
 import math as Math
+import statistics as Stats
+import textwrap
 from random import randint
 from random import uniform
 
@@ -13,7 +15,8 @@ INDIVIDUAL_SIZE = 24
 PARENT_PERCENT = 0.10
 RANDOM_PERCENT = 0.25
 MUTANT_PERCENT = 0.55
-MUTATE_NUM = 8
+DEFAULT_MUTATE_NUM = 8
+MUTATE_NUM = DEFAULT_MUTATE_NUM
 MAX_NOTE_LEN = 4
 MIN_NOTE_LEN = .5
 
@@ -245,7 +248,7 @@ def evaluate_individual(individual):
     return score
 
 
-def main(size=10):
+def main(size=10, toSave=True, toPlay=True):
     """
     The main program.
     Maintains the algorithm and writes the best MIDI file on
@@ -253,29 +256,93 @@ def main(size=10):
     :param size: the desired size of the population
     """
     global MUTATE_NUM
+    global MUTANT_PERCENT
+    global RANDOM_PERCENT
     done = False
     generation = 0
     population = generate_initial_population(size)
+    lastMaxRating = 0
+    runsStuckAtSameMaxRating = 0
+    stabilizeMutation = True
 
+    def printCurrentStats(title='None'):
+        ratingsSort = ratings.copy()
+        ratingsSort.sort()
+        body = textwrap.dedent(f"""
+        :{":" * len(title)}:
+        :{title}:
+        :{":" * len(title)}:
+            Generation: {str(generation)}
+            Current Max score: {str(currentMaxRating)}
+            Lowest score: {str(min(ratings))}
+            Mean of scores: {str(Stats.mean(ratings))}
+            Ratings: {ratingsSort}
+            Consistent Score Runs: {runsStuckAtSameMaxRating}
+            Population size: {len(population)}
+            Mutations strenght: {MUTATE_NUM}
+            New population random/mutate: {RANDOM_PERCENT}/{MUTANT_PERCENT}
+        """)
+        print(body)
+    
     while not done:
         ratings = []
         for individual in population:
             ratings.append(evaluate_individual(individual))
-
+        
         if generation % 1000 == 0:
+            # print(generation)
             index_of_best = ratings.index(max(ratings))
             best_song = population[index_of_best]
-            filename = str(generation) + ".mid"
-            write_midi_file(best_song, filename)
-            print("Playing " + filename + " with a score of: " + str(ratings[index_of_best]))
-            play_midi_file(filename)
+            currentMaxRating = int(ratings[index_of_best])
 
-            if MUTATE_NUM > 1:
+            # Deal with saving files and reseting stats after a successful new bump up.
+            if(lastMaxRating < currentMaxRating):
+                filename = f"currentRun/{str(generation)}.mid"
+                if toSave:
+                    printCurrentStats(f"S A V I N G -- {filename}")
+                    write_midi_file(best_song, filename)
+                
+                lastMaxRating = currentMaxRating
+                runsStuckAtSameMaxRating = 0
+                MUTATE_NUM = DEFAULT_MUTATE_NUM                    
+                
+                if toPlay:
+                    print("Playing " + filename + " with a score of: " + str(ratings[index_of_best]))
+                    play_midi_file(filename)
+
+        if generation % 4000 == 0 and generation != 0:
+            if runsStuckAtSameMaxRating >= 4000:
+                printCurrentStats("C H E C K  I N  O N L Y")
+                # print("\nC H E C K  I N  O N L Y  \n" + printCurrentStats())
+            # Slows down mutation amount to fine tune the randomness
+            if stabilizeMutation and MUTATE_NUM > 1:
                 MUTATE_NUM -= 1
 
-        print("Generation: " + str(generation) + " Max rating: " + str(max(ratings)))
+
+
+        # Massive radiation causes increased mutation chance if life is too stagnant.
+        if runsStuckAtSameMaxRating >= 20000:
+            if runsStuckAtSameMaxRating == 20000:
+                print(f"We are stuck at: {currentMaxRating}...")
+                print(f"Reactor meltdown initated....")
+                stabilizeMutation = False
+            if not stabilizeMutation and runsStuckAtSameMaxRating % 4000 == 0 and MUTATE_NUM < INDIVIDUAL_SIZE:
+                MUTATE_NUM += 1
+                print(f"Radiation leak causing higher than average mutations! Number of mutations now at {str(MUTATE_NUM)}.")
+                if MUTATE_NUM == INDIVIDUAL_SIZE:
+                    print("Radiation Declining")
+                    stabilizeMutation = True
+
+        if runsStuckAtSameMaxRating % 100000 == 0 and runsStuckAtSameMaxRating != 0:
+            # Change mutation to highest
+            if(MUTANT_PERCENT != .75):
+                MUTANT_PERCENT = .75
+                RANDOM_PERCENT = .05
+
         population = create_next_generation(population, ratings)
         generation += 1
+        runsStuckAtSameMaxRating += 1
 
+        
 
-main(40)
+main(size=100, toPlay=False)
