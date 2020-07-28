@@ -13,7 +13,10 @@
 !runs/*.mid
 
 # Keep important files
-README.md
-requirements.txt
+!README.md
+!requirements.txt
 
+# Add dockerfiles
+!docker-compose.yml
+!Dockerfile
 
