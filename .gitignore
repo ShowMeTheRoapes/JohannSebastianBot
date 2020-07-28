@@ -1,2 +1,19 @@
-.vscode/
-.vscode/settings.json
+# Ignore all files
+*
+*/
+**/*
+!.gitignore
+
+
+# Keep all .py files
+!*.py
+!**/*.py
+
+# Keep only saved midi files
+!runs/*.mid
+
+# Keep important files
+README.md
+requirements.txt
+
+
