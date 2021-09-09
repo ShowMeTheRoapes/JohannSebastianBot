@@ -347,6 +347,7 @@ def main(size=10, toSave=True, toPlay=True):
         population = create_next_generation(population, ratings)
         generation += 1
         runsStuckAtSameMaxRating += 1
-
-shutil.rmtree('./currentRun')
+        
+if os.path.exists('./currentRun'):
+    shutil.rmtree('./currentRun')
 main(size=100, toPlay=False)
