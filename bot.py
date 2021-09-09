@@ -6,6 +6,7 @@ import math as Math
 import statistics as Stats
 import textwrap
 import os
+import shutil
 from random import randint
 from random import uniform
 
@@ -347,6 +348,5 @@ def main(size=10, toSave=True, toPlay=True):
         generation += 1
         runsStuckAtSameMaxRating += 1
 
-        
-
+shutil.rmtree('./currentRun')
 main(size=100, toPlay=False)
