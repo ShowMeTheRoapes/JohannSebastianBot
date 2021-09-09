@@ -5,6 +5,8 @@ import pygame
 import math as Math
 import statistics as Stats
 import textwrap
+import os
+import shutil
 from random import randint
 from random import uniform
 
@@ -78,6 +80,9 @@ def write_midi_file(song, file_name):
         my_midi.addNote(track, channel, pitch, time, duration, volume)
 
     # And write it to disk.
+    if not os.path.exists('./currentRun'):
+        os.mkdir('./currentRun')
+
     bin_file = open(file_name, 'wb')
     my_midi.writeFile(bin_file)
     bin_file.close()
@@ -342,7 +347,7 @@ def main(size=10, toSave=True, toPlay=True):
         population = create_next_generation(population, ratings)
         generation += 1
         runsStuckAtSameMaxRating += 1
-
         
-
+if os.path.exists('./currentRun'):
+    shutil.rmtree('./currentRun')
 main(size=100, toPlay=False)

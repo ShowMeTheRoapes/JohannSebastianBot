@@ -10,8 +10,6 @@
 *** github_username, repo_name, twitter_handle, email, project_title, project_description
 -->
 
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -20,13 +18,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -46,8 +43,6 @@
   </p>
 </p>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
@@ -56,6 +51,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#how-to-run">How to Run</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -66,9 +62,8 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 Johann Sebastian Bot is a genetic algorithm created by Dustin Roan, Jeremy Schmich, and Alex Hoopes as a project for their Artificial Intelligence course (CS480).
@@ -77,32 +72,45 @@ The idea was to generate a number of random pieces of music split into different
 
 Feel free to download and play any of the `Sample.mid` files to see Johann's work in action!
 
-
 ### Built With
 
-* [Python](https://www.python.org/)
+- [Python](https://www.python.org/)
 
 This was built purely in Python - we used a couple small packages in order to play the music and generate MIDI files, but that's all that was used.
 
+### How To Run
+
+- Docker
+
+  1. `docker compose build`
+  2. `docker compose up`
+  3. Run will show up in ./currentRun directory
+
+- Python
+  1. `pip install -r requirements.txt`
+  2. `python bot.py`
+  3. Run will show up in ./currentRun directory
 
 <!-- ROADMAP -->
+
 ## Roadmap
+
 It has been a while since we've worked on this project, and honestly if we were to work on it again we might just start from scratch and build a Johann v2.0.
 
 That being said, our general ideas for continuing would be to make the music more complex, include other instruments aside from the single MIDI piano, and maybe even develop some kind of website to host the music that Johann Sebastian Bot would create!
 
 See the [open issues](https://github.com/ShowMeTheRoapes/JohannSebastianBot/issues) for a list of proposed features (and known issues).
 
-
-
 <!-- FAQ -->
+
 ## FAQ
+
 We haven't had any frequently asked questions yet but this is where they'll go. :)
 
-
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
+
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
@@ -111,24 +119,26 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
-
 <!-- LICENSE -->
+
 ## License
+
 Distributed under the GPL 2.0 License. See `LICENSE` for more information.
 
-
-
 <!-- CONTACT -->
+
 ## Author
+
 Authors:
+
 - [Dustin Roan](https://github.com/jango2106)
 - [Alex Hoopes](https://github.com/ahoopes16)
 - [Jeremy Schmich](https://github.com/keemhs)
-<br>
+  <br>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/ShowMeTheRoapes/JohannSebastianBot.svg?style=for-the-badge
 [contributors-url]: https://github.com/ShowMeTheRoapes/JohannSebastianBot/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/ShowMeTheRoapes/JohannSebastianBot.svg?style=for-the-badge
