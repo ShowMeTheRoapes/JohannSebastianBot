@@ -51,6 +51,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#how-to-run">How to Run</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -81,15 +82,14 @@ This was built purely in Python - we used a couple small packages in order to pl
 
 - Docker
 
-1. `docker compose build`
-2. `docker compose up`
-3. Run will show up in ./currentRun directory
+  1. `docker compose build`
+  2. `docker compose up`
+  3. Run will show up in ./currentRun directory
 
 - Python
-
-1. `pip install -r requirements.txt`
-2. `python bot.py`
-3. Run will show up in ./currentRun directory
+  1. `pip install -r requirements.txt`
+  2. `python bot.py`
+  3. Run will show up in ./currentRun directory
 
 <!-- ROADMAP -->
 
